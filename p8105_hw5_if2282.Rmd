@@ -1,0 +1,49 @@
+---
+title: "Homework 5"
+author: "Ifrah Fayyaz"
+date: "11/11/2021"
+output: github_document
+---
+
+## Loading libraries:
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+```
+
+# Problem 1
+
+```{r, message=FALSE, warning=FALSE}
+
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+
+```
