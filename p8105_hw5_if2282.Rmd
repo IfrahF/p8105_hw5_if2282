@@ -28,7 +28,7 @@ The homicide dataset contains ``r ncol(prob1)`` variables and ``r nrow(prob1)`` 
 
 ```
 
-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
+
 
 # Problem 2
 
