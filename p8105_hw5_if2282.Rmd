@@ -12,6 +12,24 @@ library(tidyverse)
 library(rvest)
 ```
 
+
+# Problem 1
+
+```{r, message=FALSE, warning=FALSE}
+prob1 = read_csv("homicide-data.csv")
+
+```
+
+**Description:**
+The homicide dataset contains ``r ncol(prob1)`` variables and ``r nrow(prob1)`` observations. It contains victim characteristics such as victim's full name (`victim_first` and `victim_last`), age (`victim_age`) and sex (`victim_sex`). The homicide data contained is for the ``r prob1 %>% pull(city) %>% n_distinct()`` cities and ``r prob1 %>% pull(state) %>% n_distinct()`` states, with ``r prob1 %>% count(city, sort = TRUE) %>% slice(1:3) %>% pull(city)`` having the most reported homicide cases. 
+
+
+```{r, message=FALSE, warning=FALSE}
+
+```
+
+
+
 # Problem 2
 
 ```{r, message=FALSE, warning=FALSE, dpi=300}
@@ -76,14 +94,6 @@ The spaghetti plot above shows the observations of 20 subjects over time - 10 re
 ```
 
 
-```{r, message=FALSE, warning=FALSE}
-
-```
-
-
-```{r, message=FALSE, warning=FALSE}
-
-```
 
 
 ```{r, message=FALSE, warning=FALSE}
