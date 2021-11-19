@@ -30,6 +30,8 @@ The homicide dataset contains ``r ncol(prob1)`` variables and ``r nrow(prob1)`` 
 
 ali is stupid
 
+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
+
 # Problem 2
 
 ```{r, message=FALSE, warning=FALSE, dpi=300}
