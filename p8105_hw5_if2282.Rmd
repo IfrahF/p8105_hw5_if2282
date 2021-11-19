@@ -28,7 +28,7 @@ The homicide dataset contains ``r ncol(prob1)`` variables and ``r nrow(prob1)`` 
 
 ```
 
-
+ali is stupid
 
 # Problem 2
 
