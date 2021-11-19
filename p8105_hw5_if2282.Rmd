@@ -9,10 +9,78 @@ output: github_document
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(rvest)
+```
+
+# Problem 2
+
+```{r, message=FALSE, warning=FALSE}
+prob2 = tibble(
+  filename = list.files("./data/")
+  )
+
+
+con_exp = function(path) {
+  df = tibble(path %>%
+       map_dfr(read_csv))
+}
+
+prob2 = prob2 %>%
+  mutate(filepath = paste0("./data/", filename)) 
+
+prob2 = prob2 %>%
+  mutate(con_exp(prob2$filepath)) %>%
+  select(-filepath)
+```
+
+
+
+dynamite_reviews = 
+  tibble(
+    page = 1:5,
+    urls = str_c(url_base, page)) %>% 
+  mutate(reviews = map(urls, read_page_reviews)) %>% 
+  unnest()
+
+
+
+
+
+
+
+
+bind_rows(con_exp
+          
+he = map(
+  prob2, bind_rows(
+  con_exp(base_url[prob2$files])) %>%
+  select(everything())
+)
+
+
+prob2 %>%
+  con_exp(files)
+
+
+%>%
+    gather(key = weeks, value = obs, week_1:week_8)
+  
+
+
+check = 
+  bind_rows(
+    con_exp("./data/con_01.csv"),
+    con_exp("./data/con_02.csv"),
+    con_exp("./data/con_03.csv")) %>%
+  select(everything()) 
+
+
+
+ch = map(file_names, con_exp(base_url[file_names$files]))
+
 
 ```
 
-# Problem 1
 
 ```{r, message=FALSE, warning=FALSE}
 
@@ -41,9 +109,11 @@ library(tidyverse)
 
 ```{r, message=FALSE, warning=FALSE}
 
-```
-
-
-```{r, message=FALSE, warning=FALSE}
+con_exp = function(path) {
+  df =  read_csv(path) %>%
+  bind_rows()
+  
+  df
+}
 
 ```
