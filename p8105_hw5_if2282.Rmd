@@ -10,22 +10,86 @@ output: github_document
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(rvest)
+library(broom)
 ```
 
 
 # Problem 1
 
 ```{r, message=FALSE, warning=FALSE}
-prob1 = read_csv("homicide-data.csv")
+prob1_data = read_csv("homicide-data.csv")
 
 ```
 
 **Description:**
-The homicide dataset contains ``r ncol(prob1)`` variables and ``r nrow(prob1)`` observations. It contains victim characteristics such as victim's full name (`victim_first` and `victim_last`), age (`victim_age`) and sex (`victim_sex`). The homicide data contained is for the ``r prob1 %>% pull(city) %>% n_distinct()`` cities and ``r prob1 %>% pull(state) %>% n_distinct()`` states, with ``r prob1 %>% count(city, sort = TRUE) %>% slice(1:3) %>% pull(city)`` having the most reported homicide cases. 
+The homicide dataset contains ``r ncol(prob1_data)`` variables and ``r nrow(prob1_data)`` observations. It contains victim characteristics such as victim's full name (`victim_first` and `victim_last`), age (`victim_age`) and sex (`victim_sex`). The homicide data contained is for the ``r prob1_data %>% pull(city) %>% n_distinct()`` cities and ``r prob1_data %>% pull(state) %>% n_distinct()`` states, with ``r prob1_data %>% count(city, sort = TRUE) %>% slice(1:3) %>% pull(city)`` having the most reported homicide cases. 
 
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, dpi=300}
+# While the solution to this problem was provided to us, I tried doing it on my own 
+# and since it works this way, I never changed my code to what was discussed in the 
+# office hours:
 
+
+# Making case_state variable:
+prob1 = prob1_data %>%
+  mutate(city_state = paste(city, ',', state)) %>%
+  mutate(city_state = gsub("+ ,", ",", city_state)) %>%   # Getting rid of whitespace before comma
+  select(-city, -state) %>%
+  mutate(city_state = as.factor(city_state)) %>%
+  mutate(disposition = as.factor(disposition))
+
+# Summarizing within cities to obtain the total number of homicides and the number of unsolved homicides:
+cases = prob1 %>% 
+  mutate(resolution = if_else(disposition == "Closed by arrest", "solved", "unsolved")) %>%
+  filter(city_state != "Tulsa, AL") %>%
+  group_by(city_state, resolution) %>%
+  summarize(
+    n = n()
+  ) %>%
+  pivot_wider(
+    names_from = "resolution",
+    values_from = "n"
+  ) %>%
+  mutate(total = solved + unsolved) %>%
+  select(-solved) 
+
+cases %>%
+  knitr::kable()
+
+# Estimating the proportion of homicides that are unsolved in Baltimore, MD:
+baltimore = cases %>%
+  filter(city_state == "Baltimore, MD") 
+
+bal = prop.test(
+  x = baltimore %>% pull(unsolved),
+  n = baltimore %>% pull(total)
+)
+
+bal %>% broom::tidy()
+
+# Running prop.test for all the other cities:
+all_cities_test = cases %>%
+     rowwise %>%
+      summarise(out = list(prop.test(unsolved, total) %>%
+             tidy)) %>%
+      ungroup %>%
+  unnest %>%
+  select(city_state, estimate, conf.low, conf.high)
+
+all_cities_test %>% knitr::kable()
+
+# Making ggplot for all cities:
+all_cities_test %>%
+  ggplot(aes(x = reorder(city_state, estimate), y = estimate)) +
+  geom_point(color = "red") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), color = "purple") +
+  labs(
+    x = "Cities",
+    y = "Proportion of unsolved cases",
+    title = "Proportion of unsolved cases by cities"
+  )
 ```
 
 
@@ -74,15 +138,20 @@ ggplot(data = prob2_tidy, aes(x = week, y = obs, group = subject_id, color = arm
   ) + 
   scale_colour_discrete(name = "Study Arm: ", labels = c("Control", "Experimental")) + 
     theme(legend.position = "bottom")
-
 ```
 
 **Description:**
 The spaghetti plot above shows the observations of 20 subjects over time - 10 registered in the control arm and 10 in the experimental arm. We can see visible differences between groups where participants in the control arm show lower observations than the participants in the experimental arm that show an increasing trend in their observations. The observations of the participants in the control arm do not show any increasing or decreasing trends over time. 
 
 
-```{r}
+# Problem 3
 
+```{r}
+set.seed(10)
+
+iris_with_missing = iris %>% 
+  map_df(~replace(.x, sample(1:150, 20), NA)) %>%
+  mutate(Species = as.character(Species))
 
 
 
