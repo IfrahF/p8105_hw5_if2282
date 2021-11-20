@@ -18,7 +18,6 @@ library(broom)
 
 ```{r, message=FALSE, warning=FALSE}
 prob1_data = read_csv("homicide-data.csv")
-
 ```
 
 **Description:**
@@ -153,28 +152,20 @@ iris_with_missing = iris %>%
   map_df(~replace(.x, sample(1:150, 20), NA)) %>%
   mutate(Species = as.character(Species))
 
+# Filling missing values with the mean of non-missing values:
+fill_na = function(x) {
+  if (is.numeric(x)) {
+    x = ifelse(is.na(x), round(mean(x, na.rm = TRUE), 1), x)
+    }
+  if (is.character(x)) {
+    x = ifelse(is.na(x), "virginica", x)
+  }
+  return(x)
+}
 
+iris_complete = map_dfr(.x = iris_with_missing, ~ fill_na(.x))
 
-
-
-
-
+sum(is.na(iris_complete))
 ```
 
-
-
-
-```{r, message=FALSE, warning=FALSE}
-
-```
-
-
-```{r, message=FALSE, warning=FALSE}
-
-```
-
-
-```{r, message=FALSE, warning=FALSE}
-
-```
-
+As the total number of missing values is ``r sum(is.na(iris_complete))``, we know that our function worked successfully!
