@@ -145,7 +145,7 @@ The spaghetti plot above shows the observations of 20 subjects over time - 10 re
 
 # Problem 3
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 set.seed(10)
 
 iris_with_missing = iris %>% 
@@ -169,3 +169,4 @@ sum(is.na(iris_complete))
 ```
 
 As the total number of missing values is ``r sum(is.na(iris_complete))``, we know that our function worked successfully!
+
